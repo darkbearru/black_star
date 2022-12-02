@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('admin', [NotificationController::class, 'view'])->name('admin');
+    Route::get('logout', [SessionController::class, 'destroy'])->name('logout');
+});
+
+
+Route::middleware(['guest'])->group(function () {
+    Route::get('login', [SessionController::class, 'create'])->name('login');
+    Route::post('login', [SessionController::class, 'store'])->name('login');
+
 });
